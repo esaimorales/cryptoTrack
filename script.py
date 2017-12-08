@@ -17,7 +17,7 @@ url3 = 'https://www.cryptocompare.com/api/data/coinlist/'
 # saves value of XRP at given time, list of tuples
 history = []
 # set threshold
-threshold = 460
+threshold = 440
 
 while True:
     response = requests.get(url2)
