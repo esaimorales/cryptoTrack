@@ -16,12 +16,8 @@ url3 = 'https://www.cryptocompare.com/api/data/coinlist/'
 
 # saves value of XRP at given time, list of tuples
 history = []
-
-def getPriceAverage():
-    return np.mean(history)
-
 # set threshold
-threshold = 455
+threshold = 460
 
 while True:
     response = requests.get(url2)
@@ -29,24 +25,25 @@ while True:
     xrp_current_usd_value = response_dict['USD']
 
     # add value to history
-    xrp_history.append(float(xrp_current_usd_value))
+    history.append(float(xrp_current_usd_value))
     print history
 
     # alert via message if XRP below set threshold
     if xrp_current_usd_value < threshold:
-        my_message = 'ALERT \n'
-        my_message += 'ETH is currently below $440 \n'
-        my_message += 'at $'
+        my_message = 'ALERT: \n ETH is currently below $'
+        my_message += str(threshold)
+        my_message += '\n at $'
         my_message += str(xrp_current_usd_value)
         my_message += ' USD!'
         sendMessage(my_number, my_message)
 
-    # send an average of past 10 min XRP value
-    # if len(history) % 10 == 0:
-    #     #print history
-    #     average_price = 'Average value \n'
-    #     average_price += 'past 10 min: $'
-    #     average_price += str(np.mean(xrp_history[-10:]))
-    #     sendMessage(my_number, average_price)
+    # send average of past 60 min ETH value
+    if len(history) % 60 == 0:
+        # send history average
+        average_price = 'Average value for '
+        average_price += 'past 60 min: $'
+        average_price += str(np.mean(xrp_history[-60:]))
+        sendMessage(my_number, average_price)
 
+    # sleep a minute
     time.sleep(60)
